@@ -12,13 +12,22 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
     exclude: /node_modules/,
   };
 
+  const cssLoaderWithModules = {
+    loader: "css-loader",
+    options: {
+      // importLoaders: 1,
+      modules: { localIdentName: isDev ? "[path][name]__[local]" : "[hash:base64:8]" },
+      esModule: false,
+    },
+  };
+
   const scssLoader = {
     test: /\.s[ac]ss$/i,
     use: [
       // Creates `style` nodes from JS strings
       isDev ? "style-loader" : MiniCssExtractPlugin.loader,
       // Translates CSS into CommonJS
-      "css-loader",
+      cssLoaderWithModules,
       // Compiles Sass to CSS
       "sass-loader",
     ],
